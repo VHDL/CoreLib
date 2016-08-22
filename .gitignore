@@ -1,0 +1,10 @@
+# ignore Python caches
+__pycache__
+
+# ignore build directories
+docs/_build/
+
+# general whitelist
+!.git*
+!.publish
+!README.md
