@@ -4,6 +4,8 @@ context vunit_lib.vunit_context;
 library synchronization_lib;
 use synchronization_lib.synchronization_pkg.all;
 
+use std.env.all;
+
 entity tb_synchronization is
   generic (
     runner_cfg : string);
@@ -29,7 +31,7 @@ begin
         wait for 0 fs;
         check_equal(number_of_times_triggered, 1, "Expected an initial run of the process at this point");
         trigger(event);
-        wait for 0 ns;
+        wait for resolution_limit;
         check_equal(number_of_times_triggered, 2, "Process should have been triggered by now");
       elsif run("Test that an event can be waited for until triggered") then
         start := now;
@@ -85,6 +87,7 @@ begin
         trigger(concurently_triggered_event);
         wait_on(concurently_triggered_event);
         check_equal(now, start);
+        wait for resolution_limit;
         wait_on(concurently_triggered_event);
         check_equal(now - start, concurently_triggered_event_delay_c);
       end if;

@@ -1,10 +1,10 @@
-library ieee;
-use ieee.std_logic_1164.all;
-
 package synchronization_pkg is
-  subtype event_t is std_logic; -- Proper type to be decided
+  function resolve_event (
+    times : time_vector)
+    return time;
+  subtype event_t is resolve_event time;
 
-  function is_triggered (
+  impure function is_triggered (
     signal event : event_t)
     return boolean;
 
@@ -22,23 +22,38 @@ package synchronization_pkg is
 end package synchronization_pkg;
 
 package body synchronization_pkg is
-  function is_triggered (
+  function resolve_event (
+    times : time_vector)
+    return time is
+    variable result : time;
+  begin
+    for i in times'range loop
+      result := maximum(times(i), result);
+    end loop;
+
+    return result;
+  end;
+
+  impure function is_triggered (
     signal event : event_t)
     return boolean is
   begin
-    return true;
+    return event = now;
   end;
 
   procedure trigger (
     signal event : out event_t;
     constant delay : in delay_length := 0 fs) is
   begin
+    event <= now + delay after delay;
   end;
 
   procedure wait_on (
     signal event : event_t) is
   begin
-    wait for 50 ns;
+    if event /= now then
+      wait on event;
+    end if;
   end;
 
   procedure wait_on (
@@ -46,8 +61,12 @@ package body synchronization_pkg is
     constant timeout   : in  time;
     variable timed_out : out boolean) is
   begin
-    wait for 50 ns;
-    timed_out := true;
+    if event /= now then
+      assert timeout > 0 ns
+        report "Setting negative timeout to 0 ns" severity warning;
+      wait on event for maximum(0 ns, timeout);
+    end if;
+    timed_out := event /= now;
   end;
 
 end package body synchronization_pkg;
