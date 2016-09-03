@@ -1,5 +1,8 @@
+library ieee;
+use ieee.std_logic_1164.all;
+
 package synchronization_pkg is
-  type event_t is (something_to_be_decided);
+  subtype event_t is std_logic; -- Proper type to be decided
 
   function is_triggered (
     signal event : event_t)

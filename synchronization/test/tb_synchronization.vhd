@@ -80,6 +80,13 @@ begin
         trigger(event);
         wait_on(event, 0 ns, timed_out);
         check_false(timed_out, "No event detected");
+      elsif run("Test that an event can be driven from several processes") then
+        start := now;
+        trigger(concurently_triggered_event);
+        wait_on(concurently_triggered_event);
+        check_equal(now, start);
+        wait_on(concurently_triggered_event);
+        check_equal(now - start, concurently_triggered_event_delay_c);
       end if;
     end loop;
 
