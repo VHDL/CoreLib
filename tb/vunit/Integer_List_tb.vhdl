@@ -27,13 +27,42 @@
 -- limitations under the License.
 -- =============================================================================
 
-package DataStructures is
-	-- Lists
-	package Integer_List_Pkg		is new work.DataStructures_List	generic map (ELEMENT_TYPE => integer);
-	package Natural_List_Pkg		is new work.DataStructures_List	generic map (ELEMENT_TYPE => natural);
-	package Positive_List_Pkg		is new work.DataStructures_List	generic map (ELEMENT_TYPE => positive);
-	
-	alias Integer_List					is Integer_List_Pkg.PT_List;
-	alias Natural_List					is Natural_List_Pkg.PT_List;
-	alias Positive_List					is Positive_List_Pkg.PT_List;
-end package;
+library CoreLib;
+use			work.DataStructures.all;
+
+entity DataStructures_Integer_List_tb is
+end entity;
+
+architecture test of DataStructures_Integer_List_tb is
+	-- shared variable	GlobalStdOut	: T_STDOUT;
+	shared variable List1					: Integer_List;
+begin
+	process
+		variable index		: INTEGER;
+		variable element	: INTEGER;
+	begin
+		List1.Init;
+		
+		for i in 0 to 67 loop
+			element := i + 1;
+			GlobalStdOut.PrintLine("Append " & INTEGER'image(element));
+			index		:= List1.Append(element);
+			GlobalStdOut.PrintLine("  index= " & INTEGER'image(index));
+			
+			index		:= List1.IndexOf(element);
+			List1.Set(index, element + 100);
+			element	:= List1.Get(i);
+			GlobalStdOut.PrintLine("  IndexOf -> " & INTEGER'image(index));
+			GlobalStdOut.PrintLine("  Get -> " & INTEGER'image(element));
+		end loop;
+		for i in 54 downto 27 loop
+			GlobalStdOut.PrintLine("RemoveAt " & INTEGER'image(i));
+			List1.RemoveAt(i);
+		end loop;
+		for i in 20 downto 7 loop
+			GlobalStdOut.PrintLine("Remove " & INTEGER'image(i + 101));
+			List1.Remove(i + 101);
+		end loop;
+		wait;
+	end process;
+end architecture;

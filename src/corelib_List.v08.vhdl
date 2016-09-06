@@ -27,8 +27,7 @@
 -- limitations under the License.
 -- =============================================================================
 
-
-package corelib_List is
+package DataStructures_List is
 	generic (
 		type ELEMENT_TYPE;
 		InitialMasterListSize	: POSITIVE	:= 4;
@@ -70,7 +69,7 @@ package corelib_List is
 end package;
 
 
-package body corelib_List is
+package body DataStructures_List is
 	-- protected list implementation
 	type PT_LIST is protected body
 		subtype T_Chunk is ELEMENT_ARRAY;
