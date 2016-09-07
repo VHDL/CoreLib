@@ -1,16 +1,25 @@
 package corelib_Dict is
-  -- Removing generics for now to enable simple example under tested under
+  -- Removing generics for now to enable simple example tested under
   -- Travis with GHDL
   --generic (
   --  type KEY_TYPE;
   --  type VALUE_TYPE;
   --  function to_hash(d : in KEY_TYPE) return string
   --);
+  constant dictionary_size_c : positive := 100;
+  type T_DICT_ITEM is record
+    valid : boolean;
+    data : integer;
+  end record T_DICT_ITEM;
+  type T_DICT is array (0 to dictionary_size_c - 1) of T_DICT_ITEM;
+
+  function Get (dict : T_DICT; key  : string) return integer;
 
   type PT_DICT is protected
     -- Start with some basic methods
-    procedure Set (constant key : in string; constant data : in integer);
-    impure function Get (constant key : string) return integer;
+    procedure Set (key : string; data : integer);
+    impure function Get (key : string) return integer;
+    impure function Export return T_DICT;
 
     --procedure Get (constant key : in string; data : out integer);
     --procedure Del (constant key : in string);
@@ -22,33 +31,40 @@ package corelib_Dict is
 end package corelib_Dict;
 
 package body corelib_Dict is
+  function hash (dict : T_DICT; key : string) return positive is
+  begin
+    return key'length mod dict'length;
+  end function hash;
+
+  function Get (dict : T_DICT; key  : string) return integer is
+  begin
+    assert dict(hash(dict, key)).valid report "Key error";
+    return dict(hash(dict, key)).data;
+  end;
+
   type PT_DICT is protected body
-    type dictionary_item_t is record
-      valid : boolean;
-      value : integer;
-    end record dictionary_item_t;
-    type dictionary_t is array (natural range <>) of dictionary_item_t;
+    variable dictionary : T_DICT := (others => (false, 0));
 
-    variable dictionary : dictionary_t(0 to 99) := (others => (false, 0));
-
-    impure function hash (
-      key : string)
-      return positive is
+    procedure Set (key : string; data : integer) is
     begin
-      return key'length mod dictionary'length;
-    end function hash;
-
-    procedure Set (constant key : in string; constant data : in integer) is
-    begin
-      assert not dictionary(hash(key)).valid report "Dictionary full";
-      dictionary(hash(key)).valid := true;
-      dictionary(hash(key)).value := data;
+      assert not dictionary(hash(dictionary, key)).valid report "Dictionary full";
+      dictionary(hash(dictionary, key)).valid := true;
+      dictionary(hash(dictionary, key)).data := data;
     end;
 
-    impure function Get (constant key : string) return integer is
+    impure function Get (key : string) return integer is
     begin
-      assert dictionary(hash(key)).valid report "Key error";
-      return dictionary(hash(key)).value;
+      return Get(dictionary, key);
+    end;
+
+    impure function Export return T_DICT is
+      variable ret_val : T_DICT;
+    begin
+      for i in dictionary'range loop
+        ret_val(i).valid := dictionary(i).valid;
+        ret_val(i).data := dictionary(i).data;
+      end loop;
+      return ret_val;
     end;
 
   end protected body PT_DICT;
