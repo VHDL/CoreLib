@@ -4,7 +4,7 @@ package corelib_Dict is
   generic (
     type     KEY_TYPE;
     type     VALUE_TYPE;
-    function to_hash(d : in KEY_TYPE) return natural;
+    function to_hash(d : in KEY_TYPE, size : positive) return natural;
   );
 
 
