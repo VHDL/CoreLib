@@ -8,3 +8,5 @@ docs/_build/
 !.git*
 !.publish
 !README.md
+
+vunit_out/

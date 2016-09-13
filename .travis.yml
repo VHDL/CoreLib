@@ -1,0 +1,18 @@
+language: python
+matrix:
+  include:
+    # Python 3.5 with ghdl llvm
+    - env: CONFIG="Trusty,Python3.5,libgnat-4.8,grc-1.9"
+      os: linux
+      sudo: required
+      dist: trusty
+      python: "3.5"
+      before_install:
+        - sudo apt-get install -y libgnat-4.8
+        - sudo ./tools/Travis-CI/grc.setup.sh
+install:
+  - pip3 install -r tools/Travis-CI/requirements.txt
+before_script:
+  - ./tools/Travis-CI/ghdl.setup.sh
+script:
+  - python3 run.py
