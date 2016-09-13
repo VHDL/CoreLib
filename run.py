@@ -1,7 +1,7 @@
 from vunit import VUnit
 from pathlib import Path
 
-rootDirectory = Path(__file__)
+rootDirectory = Path.cwd()
 
 # Create and configure a VUnit instance and handover the command line arguments
 vu = VUnit.from_argv()
