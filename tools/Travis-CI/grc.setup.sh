@@ -27,7 +27,9 @@ echo -e "${MAGENTA}========================================${NOCOLOR}"
 echo -e "${MAGENTA}     Downloading and installing grcat   ${NOCOLOR}"
 echo -e "${MAGENTA}========================================${NOCOLOR}"
 echo -e "${CYAN}mkdir -p $TEMP_DIR${NOCOLOR}"
-mkdir -p $TEMP_DIR && cd $TEMP_DIR
+mkdir -p $TEMP_DIR
+chown travis:travis $TEMP_DIR
+cd $TEMP_DIR
 
 # downloading GHDL
 echo -e "${CYAN}Downloading $GRC_DEB from $GRC_URL...${NOCOLOR}"
