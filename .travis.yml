@@ -14,5 +14,6 @@ install:
   - pip3 install -r tools/Travis-CI/requirements.txt
 before_script:
   - ./tools/Travis-CI/ghdl.setup.sh
+  - env
 script:
   - python3 run.py

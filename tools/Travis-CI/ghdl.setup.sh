@@ -84,8 +84,7 @@ else
 fi
 
 echo -e "${CYAN}Add GHDL to PATH...${NOCOLOR}"
-ls -ah $GITROOT/$TRAVIS_DIR
-ls -ah $GITROOT/$TRAVIS_DIR/bin
+ls -lah $GITROOT/$TRAVIS_DIR/bin
 echo "export PATH=$GITROOT/$TRAVIS_DIR/bin:$PATH"
 export PATH=$GITROOT/$TRAVIS_DIR/bin:$PATH
 
