@@ -9,6 +9,7 @@ matrix:
       python: "3.5"
       before_install:
         - sudo apt-get install -y libgnat-4.8
+        - ls -lah tools; ls -lah tools/Travis-CI; ls -lah tools/Travis-CI/ghdl
         - sudo ./tools/Travis-CI/grc.setup.sh
 install:
   - pip3 install -r tools/Travis-CI/requirements.txt
