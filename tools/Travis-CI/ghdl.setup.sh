@@ -41,7 +41,6 @@ echo -e "${MAGENTA}========================================${NOCOLOR}"
 echo -e "${MAGENTA}     Downloading and installing GHDL    ${NOCOLOR}"
 echo -e "${MAGENTA}========================================${NOCOLOR}"
 echo -e "${CYAN}mkdir -p $TRAVIS_DIR${NOCOLOR}"
-ls -lah .
 mkdir -p $TRAVIS_DIR
 if [ $? -ne 0 ]; then
 	echo 1>&2 -e "${RED}mkdir [FAILED]${NOCOLOR}"
@@ -85,7 +84,7 @@ else
 fi
 
 echo -e "${CYAN}Add GHDL to PATH...${NOCOLOR}"
-echo "export PATH=$GITROOT/$TRAVIS_DIR:$PATH"
+echo "export PATH=$GITROOT/$TRAVIS_DIR/bin:$PATH"
 export PATH=$GITROOT/$TRAVIS_DIR:$PATH
 
 # WORKAROUND:
