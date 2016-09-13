@@ -41,7 +41,12 @@ echo -e "${MAGENTA}========================================${NOCOLOR}"
 echo -e "${MAGENTA}     Downloading and installing GHDL    ${NOCOLOR}"
 echo -e "${MAGENTA}========================================${NOCOLOR}"
 echo -e "${CYAN}mkdir -p $TRAVIS_DIR${NOCOLOR}"
+ls -lah .
 mkdir -p $TRAVIS_DIR
+if [ $? -ne 0 ]; then
+	echo 1>&2 -e "${RED}mkdir [FAILED]${NOCOLOR}"
+	exit 1
+fi
 cd $TRAVIS_DIR
 
 # downloading GHDL
