@@ -26,7 +26,6 @@ GITHUB_URL="$GITHUB_SERVER/$GITHUB_SLUG/releases/download/$GITHUB_TAGNAME/$GITHU
 # other variables
 # --------------------------------------
 GITROOT=$(pwd)
-POCROOT=$(pwd)
 GHDL_TARBALL="ghdl.tgz"
 
 # define color escape codes
@@ -80,8 +79,12 @@ else
 	exit 1
 fi
 
+echo -e "${CYAN}Add GHDL to PATH...${NOCOLOR}"
+echo "export PATH=$GITROOT/$TRAVIS_DIR:$PATH"
+export PATH=$GITROOT/$TRAVIS_DIR:$PATH
+
 # WORKAROUND:
 echo -e "${YELLOW}WORKAROUND: needed until GHDL ships vendor compile scripts in the monthly build${NOCOLOR}"
 mkdir -p ./lib/ghdl/vendors
-cp $POCROOT/tools/Travis-CI/ghdl/*.sh ./lib/ghdl/vendors
-cp $POCROOT/tools/Travis-CI/ghdl/*.grcrules ./lib/ghdl/vendors
+cp $GITROOT/tools/Travis-CI/ghdl/*.sh ./lib/ghdl/vendors
+cp $GITROOT/tools/Travis-CI/ghdl/*.grcrules ./lib/ghdl/vendors
