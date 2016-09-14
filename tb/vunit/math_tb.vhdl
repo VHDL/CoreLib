@@ -33,29 +33,26 @@ use			work.math.all;
 library vunit_lib;
 context vunit_lib.vunit_context;
 
+
 entity math_tb is
 	generic (runner_cfg : string);
 end entity;
 
-architecture test of math_tb is
 
+architecture test of math_tb is
 begin
 	TestRunner : process
-		-- variable start     : time;
-		-- variable timed_out : boolean;
-		
 	begin
-		--checker_init(display_format => verbose);
 		test_runner_setup(runner, runner_cfg);
 
 		while test_suite loop
 			if run("Check square numbers from 0 to 20") then
 				for i in 0 to 20 loop
-					check_equal(squareNumber(i) = (i*i));
+					check(squareNumber(i) = (i*i));
 				end loop;
 			elsif run("Check cubic numbers from 0 to 20") then
 				for i in 0 to 20 loop
-					check_equal(cubicNumber(i) = (i*i*i));
+					check(cubicNumber(i) = (i*i*i));
 				end loop;
 			end if;
 		end loop;
@@ -66,5 +63,3 @@ begin
 
 	test_runner_watchdog(runner, 100 ns);
 end architecture;
-
-
