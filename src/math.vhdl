@@ -80,8 +80,13 @@ package body math is
 		variable M2				: natural;
 		variable Remainer	: natural;
 	begin
-		M1	:= imax(N1, N2);
-		M2	:= imin(N1, N2);
+		if (N1 >= N2) then
+			M1 := N1;
+			M2 := N2;
+		else
+			M1 := N2;
+			M2 := N1;
+		end if;
 		while M2 /= 0 loop
 			Remainer	:= M1 mod M2;
 			M1				:= M2;
