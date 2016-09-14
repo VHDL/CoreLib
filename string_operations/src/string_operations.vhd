@@ -121,8 +121,20 @@ package body string_operations is
     replace : string;
     max_num_of_replacements : in natural := natural'high
   ) return string is
-  begin
-    return "not implemented";
+		variable pos		: integer;
+	begin
+		pos := str_pos(str, pattern);
+		if pos > 0 then
+			if pos = 1 then
+				return replace & str(pattern'length + 1 to str'length);
+			elsif (pos = str'length - pattern'length + 1) then
+				return str(1 to str'length - pattern'length) & replace;
+			else
+				return str(1 to pos - 1) & replace & str(pos + pattern'length to str'length);
+			end if;
+		else
+			return str;
+		end if;
   end;
 
 end package body string_operations;
