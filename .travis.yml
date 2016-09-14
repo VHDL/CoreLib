@@ -15,4 +15,4 @@ install:
 before_script:
   - ./tools/Travis-CI/ghdl.setup.sh
 script:
-  - python3 run.py
+  - PATH=/home/travis/build/VHDL/CoreLib/temp/Travis-CI/bin:$PATH python3 run.py

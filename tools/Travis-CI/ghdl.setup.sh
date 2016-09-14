@@ -26,7 +26,6 @@ GITHUB_URL="$GITHUB_SERVER/$GITHUB_SLUG/releases/download/$GITHUB_TAGNAME/$GITHU
 # other variables
 # --------------------------------------
 GITROOT=$(pwd)
-POCROOT=$(pwd)
 GHDL_TARBALL="ghdl.tgz"
 
 # define color escape codes
@@ -43,6 +42,10 @@ echo -e "${MAGENTA}     Downloading and installing GHDL    ${NOCOLOR}"
 echo -e "${MAGENTA}========================================${NOCOLOR}"
 echo -e "${CYAN}mkdir -p $TRAVIS_DIR${NOCOLOR}"
 mkdir -p $TRAVIS_DIR
+if [ $? -ne 0 ]; then
+	echo 1>&2 -e "${RED}mkdir [FAILED]${NOCOLOR}"
+	exit 1
+fi
 cd $TRAVIS_DIR
 
 # downloading GHDL
@@ -83,5 +86,5 @@ fi
 # WORKAROUND:
 echo -e "${YELLOW}WORKAROUND: needed until GHDL ships vendor compile scripts in the monthly build${NOCOLOR}"
 mkdir -p ./lib/ghdl/vendors
-cp $POCROOT/tools/Travis-CI/ghdl/*.sh ./lib/ghdl/vendors
-cp $POCROOT/tools/Travis-CI/ghdl/*.grcrules ./lib/ghdl/vendors
+cp $GITROOT/tools/Travis-CI/ghdl/*.sh ./lib/ghdl/vendors
+cp $GITROOT/tools/Travis-CI/ghdl/*.grcrules ./lib/ghdl/vendors
