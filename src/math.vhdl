@@ -49,12 +49,12 @@ package body math is
 	-- figurate numbers
 	function squareNumber(N : positive) return positive is
 	begin
-		return N * N;
+		return N ** 2;
 	end function;
 	
 	function cubicNumber(N : positive) return positive is
 	begin
-		return N * N * N;
+		return N ** 3;
 	end function;
 	
 	function triangularNumber(N : natural) return natural is
