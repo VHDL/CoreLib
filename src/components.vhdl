@@ -4,17 +4,17 @@
 -- =============================================================================
 -- Authors:					Patrick Lehmann
 --
--- Package:					Math extension package.
+-- Package:					Syntheziable hardware components expressed as functions.
 --
 -- Description:
 -- -------------------------------------
---		This packages describes common primitives like flip flops and multiplexers
---		as a function to use them as one-liners.
---
---	ATTENSION:
---		The parameter 'constant INIT' of some functions is actually the reset
---		value, not the initial value after device programming (e.g. for FPGAs),
---		this value MUST be set via signal declaration!
+-- This packages describes common primitives like flip flops and multiplexers
+-- as a function to use them as one-liners.
+-- 
+-- .. ATTENSION:
+--    The parameter `constant INIT` of some functions is actually the reset
+--    value, not the initial value after device programming (e.g. for FPGAs),
+--    this value MUST be set via signal declaration!
 --
 -- License:
 -- =============================================================================
