@@ -12,8 +12,8 @@ CoreLib = vu.add_library("CoreLib")
 CoreLib.add_source_files(str(rootDirectory / "src/math.vhdl"))
 
 # Create the VHDL library 'Testbench' and add required files
-Testbench = vu.add_library("Testbench")
-Testbench.add_source_files(str(rootDirectory / "tb/vunit/math_tb.vhdl"))
+# Testbench = vu.add_library("Testbench")
+CoreLib.add_source_files(str(rootDirectory / "tb/vunit/math_tb.vhdl"))
 
 # launch VUnit
 vu.main()
