@@ -83,11 +83,6 @@ else
 	exit 1
 fi
 
-echo -e "${CYAN}Add GHDL to PATH...${NOCOLOR}"
-ls -lah $GITROOT/$TRAVIS_DIR/bin
-echo "export PATH=$GITROOT/$TRAVIS_DIR/bin:$PATH"
-export PATH=$GITROOT/$TRAVIS_DIR/bin:$PATH
-
 # WORKAROUND:
 echo -e "${YELLOW}WORKAROUND: needed until GHDL ships vendor compile scripts in the monthly build${NOCOLOR}"
 mkdir -p ./lib/ghdl/vendors
