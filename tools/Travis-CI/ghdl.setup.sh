@@ -3,7 +3,7 @@
 # configure variables in the section below
 GHDL_BACKEND="llvm"
 GHDL_VERSION="0.34dev"
-RELEASE_DATE="2016-06-07"
+RELEASE_DATE="2016-09-14"
 
 GITHUB_SERVER="https://github.com"
 GITHUB_SLUG="tgingold/ghdl"
@@ -19,7 +19,7 @@ GITHUB_TAGNAME="$RELEASE_DATE"
 # example: ghdl-llvm-0.34dev-2016-05-03.tgz
 GITHUB_RELEASE_FILE="ghdl-$GHDL_VERSION-$GHDL_BACKEND-$RELEASE_DATE.tgz"
 
-# example: https://github.com/tgingold/ghdl/releases/download/2016.05.03/ghdl-0.34dev-llvm-2016-05-03.tar.gz
+# example: https://github.com/tgingold/ghdl/releases/download/2016.05.03/ghdl-0.34dev-llvm-2016-05-03.tgz
 GITHUB_URL="$GITHUB_SERVER/$GITHUB_SLUG/releases/download/$GITHUB_TAGNAME/$GITHUB_RELEASE_FILE"
 
 
@@ -84,7 +84,7 @@ else
 fi
 
 # WORKAROUND:
-echo -e "${YELLOW}WORKAROUND: needed until GHDL ships vendor compile scripts in the monthly build${NOCOLOR}"
-mkdir -p ./lib/ghdl/vendors
-cp $GITROOT/tools/Travis-CI/ghdl/*.sh ./lib/ghdl/vendors
-cp $GITROOT/tools/Travis-CI/ghdl/*.grcrules ./lib/ghdl/vendors
+#echo -e "${YELLOW}WORKAROUND: needed until GHDL ships vendor compile scripts in the monthly build${NOCOLOR}"
+#mkdir -p ./lib/ghdl/vendors
+#cp $GITROOT/tools/Travis-CI/ghdl/*.sh ./lib/ghdl/vendors
+#cp $GITROOT/tools/Travis-CI/ghdl/*.grcrules ./lib/ghdl/vendors
