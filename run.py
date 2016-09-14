@@ -2,7 +2,6 @@ from vunit import VUnit
 from os.path import dirname, join
 
 vu = VUnit.from_argv()
-vu.enable_location_preprocessing()
 
 root = join(dirname(__file__), 'synchronization')
 

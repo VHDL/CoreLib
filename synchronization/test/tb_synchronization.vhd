@@ -21,37 +21,42 @@ begin
     variable start : time;
     variable timed_out : boolean;
   begin
-    checker_init(display_format => verbose);
     test_runner_setup(runner, runner_cfg);
 
     while test_suite loop
       if run("Test that an uninitialized event is not triggered") then
         check_false(is_triggered(event));
+
       elsif run("Test that an event in a sensitivity list will trigger the process") then
         wait for 0 fs;
         check_equal(number_of_times_triggered, 1, "Expected an initial run of the process at this point");
         trigger(event);
         wait for resolution_limit;
         check_equal(number_of_times_triggered, 2, "Process should have been triggered by now");
+
       elsif run("Test that an event can be waited for until triggered") then
         start := now;
         wait_on(delayed_event);
         check_equal(now - start, event_delay_c);
+
       elsif run("Test that a wait for a triggered event does not block") then
         wait_on(delayed_event);
         start := now;
         wait_on(delayed_event);
         check_equal(start, now);
+
       elsif run("Test that a wait with timeout blocks until event is set if that happens before the timeout") then
         start := now;
         wait_on(delayed_event, event_delay_c + 1 ns, timed_out);
         check_equal(now - start, event_delay_c, "Did not block correctly on wait statement");
         check_false(timed_out, "Time out reported");
+
       elsif run("Test that a wait with timeout times out if timeout happens before event is set") then
         start := now;
         wait_on(delayed_event, event_delay_c - 1 ns, timed_out);
         check_equal(now - start, event_delay_c - 1 ns, "Did not timeout when expected");
         check(timed_out, "Time out not reported");
+
       elsif run("Test that a negative timeout behaves like a zero timeout") then
         start := now;
         wait_on(event, -1 ns, timed_out);
@@ -62,26 +67,31 @@ begin
         wait_on(event, -1 ns, timed_out);
         check_equal(start, now, "Blocked on an already triggered event");
         check_false(timed_out, "Time out reported");
+
       elsif run("Test that an event triggered with zero delay is triggered in the next delta cycle") then
         trigger(event);
         check_false(is_triggered(event), "Event triggered");
         wait for 0 ns;
         check(is_triggered(event), "Event not triggered");
+
       elsif run("Test that an event triggered with a positive delay is triggered after the delay given") then
         trigger(event, 3 ns);
         start := now;
         wait_on(event);
         check_equal(now - start, 3 ns, "Did not trigger correctly");
+
       elsif run("Test that an event can be triggered concurrently") then
         start := now;
         wait_on(concurently_triggered_event);
         check_equal(now - start, concurently_triggered_event_delay_c);
+
       elsif run("Test that an event triggered simultaneously two times does not cancel each other") then
         -- The original proposal suggests that these two events should cancel each other
         trigger(event);
         trigger(event);
         wait_on(event, 0 ns, timed_out);
         check_false(timed_out, "No event detected");
+
       elsif run("Test that an event can be driven from several processes") then
         start := now;
         trigger(concurently_triggered_event);
@@ -94,7 +104,6 @@ begin
     end loop;
 
     test_runner_cleanup(runner);
-    wait;
   end process;
 
   test_runner_watchdog(runner, 100 ns);
