@@ -82,9 +82,3 @@ else
 	echo 1>&2 -e "${RED}GHDL test [FAILED]${NOCOLOR}"
 	exit 1
 fi
-
-# WORKAROUND:
-#echo -e "${YELLOW}WORKAROUND: needed until GHDL ships vendor compile scripts in the monthly build${NOCOLOR}"
-#mkdir -p ./lib/ghdl/vendors
-#cp $GITROOT/tools/Travis-CI/ghdl/*.sh ./lib/ghdl/vendors
-#cp $GITROOT/tools/Travis-CI/ghdl/*.grcrules ./lib/ghdl/vendors
