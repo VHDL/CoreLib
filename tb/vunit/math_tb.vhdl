@@ -23,33 +23,32 @@
 -- See the License for the specific language governing permissions and
 -- limitations under the License.
 -- =============================================================================
-
-library CoreLib;
-use     work.math.all;
+use work.math.all;
 
 library vunit_lib;
 context vunit_lib.vunit_context;
-
+use vunit_lib.array_pkg.all;
 
 entity math_tb is
   generic (runner_cfg : string);
 end entity;
 
-
 architecture test of math_tb is
 begin
   TestRunner : process
+    variable reference_data :array_t;
   begin
     test_runner_setup(runner, runner_cfg);
 
     while test_suite loop
-      if run("Check square numbers from 0 to 20") then
-        for i in 0 to 20 loop
-          check_equal(squareNumber(i), (i*i));
+      reference_data.load_csv(join(output_path(runner_cfg), "reference_data.csv"));
+      if run("Test square number function against reference data") then
+        for i in 0 to reference_data.length/2 - 1 loop
+          check_equal(squareNumber(reference_data.get(2 * i)), reference_data.get(2 * i + 1));
         end loop;
-      elsif run("Check cubic numbers from 0 to 20") then
-        for i in 0 to 20 loop
-          check_equal(cubicNumber(i), (i*i*i));
+      elsif run("Test cubic number function against reference data") then
+        for i in 0 to reference_data.length/2 - 1 loop
+          check_equal(cubicNumber(reference_data.get(2 * i)), reference_data.get(2 * i + 1));
         end loop;
       end if;
     end loop;
