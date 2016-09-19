@@ -30,10 +30,6 @@ begin
 
 
   test_runner : process is
-    impure function is_equal (key : integer; expected_data : std_logic_vector) return boolean is
-    begin
-      return sv_dict.Get(key) = expected_data;
-    end function is_equal;
     variable v_random : RandomPType;
   begin
     test_runner_setup(runner, runner_cfg);
@@ -49,21 +45,21 @@ begin
         check_equal(sv_dict.Count, 1);
       elsif run("Test that dictionary data can be set and retrieved") then
         sv_dict.Set(42, x"DEADBEEF");
-        check(is_equal(42, x"DEADBEEF"));
+        check_equal(sv_dict.Get(42), std_logic_vector'(x"DEADBEEF"));
       elsif run("Test that dictionary data can be set and removed") then
         sv_dict.Set(42, x"DEADBEEF");
         check(sv_dict.HasKey(42));
         sv_dict.Del(42);
-        check(not(sv_dict.HasKey(42)));
+        check_false(sv_dict.HasKey(42));
       elsif run("Test that dictionary data can be overwritten when having same key") then
         sv_dict.Set(42, x"DEADBEEF");
         sv_dict.Set(42, x"DEADAFFE");
-        check(is_equal(42, x"DEADAFFE"));
+        check_equal(sv_dict.Get(42), std_logic_vector'(x"DEADAFFE"));
       elsif run("Test that dictionary data with same hash table slot can be set and retrieved") then
         sv_dict.Set(1, x"DEADBEEF");
         sv_dict.Set(129, x"DEADAFFE");
-        check(is_equal(1, x"DEADBEEF"));
-        check(is_equal(129, x"DEADAFFE"));
+        check_equal(sv_dict.Get(1), std_logic_vector'(x"DEADBEEF"));
+        check_equal(sv_dict.Get(129), std_logic_vector'(x"DEADAFFE"));
         check_equal(sv_dict.Count, 2);
       elsif run("Test that dictionary data with same hash table slot can be set and completely removed") then
         sv_dict.Set(1, x"DEADBEEF");
@@ -80,7 +76,7 @@ begin
         end loop;
         v_random.InitSeed(test_runner'instance_name);
         for i in 0 to 127 loop
-          check(is_equal(i, v_random.RandSlv(32)));
+          check_equal(sv_dict.Get(i), v_random.RandSlv(32));
         end loop;
         check_equal(sv_dict.Count, 128);
       elsif run("Test that dictionary data can be cleared") then
