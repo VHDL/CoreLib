@@ -3,6 +3,7 @@ from os.path import dirname, join
 
 vu = VUnit.from_argv()
 vu.enable_location_preprocessing()
+vu.add_osvvm()
 
 root = join(dirname(__file__), 'data_structures')
 
