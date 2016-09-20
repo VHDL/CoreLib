@@ -26,7 +26,6 @@ package corelib_Dict is
     procedure Get (constant key : in KEY_TYPE; data : out VALUE_TYPE);
     impure function Get (constant key : KEY_TYPE) return VALUE_TYPE;
     procedure Del (constant key : in KEY_TYPE);
-    procedure Init (constant logging : in boolean := false; constant Size : in natural := 128);
     procedure Clear;
     impure function HasKey (constant key : KEY_TYPE) return boolean;
     impure function Count return natural;
@@ -48,7 +47,7 @@ package body corelib_Dict is
 
 
   type PT_DICT is protected body
-    
+
 
     type t_entry;
     type t_entry_ptr is access t_entry;
@@ -113,9 +112,10 @@ package body corelib_Dict is
     procedure Get (constant key : in KEY_TYPE; data : out VALUE_TYPE) is
       variable entry : t_entry_ptr := Find(key);
     begin
-      if (entry /= null) then
-        data := entry.data.all;
-      end if;
+      assert entry /= null
+        report PT_DICT'instance_name & ": ERROR: key " & to_string(key) & " not found"
+        severity failure;
+      data := entry.data.all;
     end procedure Get;
 
     impure function Get (constant key : KEY_TYPE) return VALUE_TYPE is
@@ -153,10 +153,6 @@ package body corelib_Dict is
         entry_count(addr) := entry_count(addr) - 1;
       end if;
     end procedure Del;
-
-    procedure Init (constant logging : in boolean := false; constant Size : in natural := 128) is
-    begin
-    end procedure Init;
 
     procedure Clear  is
       variable entry   : t_entry_ptr;
