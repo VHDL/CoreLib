@@ -23,18 +23,21 @@
 -- See the License for the specific language governing permissions and
 -- limitations under the License.
 -- =============================================================================
-
+library ieee;
+use ieee.math_real.all;
 
 package math is
+  constant sqrt_of_natural_high_c : natural := natural(floor(sqrt(real(natural'high))));
+  constant cbrt_of_natural_high_c : natural := natural(floor(cbrt(real(natural'high))));
   -- figurate numbers
-  function squareNumber(N : natural) return natural;
-  function cubicNumber(N : natural) return natural;
+  function squareNumber(N : natural range 0 to sqrt_of_natural_high_c) return natural;
+  function cubicNumber(N : natural range 0 to cbrt_of_natural_high_c) return natural;
   function triangularNumber(N : natural) return natural;
-  
+
   -- coefficients
   -- binomial coefficient (N choose K)
   function binomialCoefficient(N : positive; K : positive) return positive;
-  
+
   -- greatest common divisor (gcd)
   function greatestCommonDivisor(N1 : positive; N2 : positive) return positive;
   -- least common multiple (lcm)
@@ -44,22 +47,22 @@ end package;
 
 package body math is
   -- figurate numbers
-  function squareNumber(N : natural) return natural is
+  function squareNumber(N : natural range 0 to sqrt_of_natural_high_c) return natural is
   begin
     return N ** 2;
   end function;
-  
-  function cubicNumber(N : natural) return natural is
+
+  function cubicNumber(N : natural range 0 to cbrt_of_natural_high_c) return natural is
   begin
     return N ** 3;
   end function;
-  
+
   function triangularNumber(N : natural) return natural is
     variable T  : natural;
   begin
     return (N * (N + 1) / 2);
   end function;
-  
+
   -- coefficients
   function binomialCoefficient(N : positive; K : positive) return positive is
     variable Result    : positive;
@@ -70,7 +73,7 @@ package body math is
     end loop;
     return Result;
   end function;
-  
+
   -- greatest common divisor (gcd)
   function greatestCommonDivisor(N1 : positive; N2 : positive) return positive is
     variable M1        : positive;
@@ -91,7 +94,7 @@ package body math is
     end loop;
     return M1;
   end function;
-  
+
   -- least common multiple (lcm)
   function leastCommonMultiple(N1 : positive; N2 : positive) return positive is
   begin

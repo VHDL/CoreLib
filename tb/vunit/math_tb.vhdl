@@ -30,23 +30,32 @@ context vunit_lib.vunit_context;
 use vunit_lib.array_pkg.all;
 
 entity math_tb is
-  generic (runner_cfg : string);
+  generic (
+    runner_cfg : string;
+    natural_high_path :string := "");
 end entity;
 
 architecture test of math_tb is
 begin
   TestRunner : process
     variable reference_data :array_t;
+    variable natural_high :array_t;
   begin
     test_runner_setup(runner, runner_cfg);
 
     while test_suite loop
-      reference_data.load_csv(join(output_path(runner_cfg), "reference_data.csv"));
-      if run("Test square number function against reference data") then
+      if run("Test that natural high is according to LRM") then
+        check(natural'high >= 2**31 - 1);
+        natural_high.init;
+        natural_high.append(natural'high);
+        natural_high.save_csv(natural_high_path);
+      elsif run("Test square number function against reference data") then
+        reference_data.load_csv(join(output_path(runner_cfg), "reference_data.csv"));
         for i in 0 to reference_data.length/2 - 1 loop
           check_equal(squareNumber(reference_data.get(2 * i)), reference_data.get(2 * i + 1));
         end loop;
       elsif run("Test cubic number function against reference data") then
+        reference_data.load_csv(join(output_path(runner_cfg), "reference_data.csv"));
         for i in 0 to reference_data.length/2 - 1 loop
           check_equal(cubicNumber(reference_data.get(2 * i)), reference_data.get(2 * i + 1));
         end loop;
