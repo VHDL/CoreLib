@@ -9,7 +9,7 @@ library vunit_lib;
 context vunit_lib.vunit_context;
 
 library data_structures_lib;
-use data_structures_lib.corelib_Dict.all;
+use data_structures_lib.DataStructures.all;
 
 
 
@@ -23,7 +23,7 @@ end entity tb_data_structures;
 architecture test_fixture of tb_data_structures is
 
 
-  shared variable sv_dict : PT_DICT;
+  shared variable sv_dict : Integer_Slv_Dict;
 
 
 begin

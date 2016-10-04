@@ -5,19 +5,19 @@ use ieee.std_logic_1164.all;
 
 package corelib_Dict is
 
---  generic (
---    type     KEY_TYPE;
---    type     VALUE_TYPE;
---    function to_hash(d : in KEY_TYPE, size : positive) return natural;
---    INIT_SIZE : natural := 128
---  );
+  generic (
+    type     KEY_TYPE;
+    type     VALUE_TYPE;
+    function to_hash(d : in KEY_TYPE; size : positive) return natural;
+    INIT_SIZE : natural := 128
+  );
 
 
   -- REMOVE when using package generics
-  constant INIT_SIZE : positive := 128;
-  alias to_hash is "mod" [integer, integer return integer];
-  subtype KEY_TYPE   is integer;
-  subtype VALUE_TYPE is std_logic_vector;
+--  constant INIT_SIZE : positive := 128;
+--  alias to_hash is "mod" [integer, integer return integer];
+--  subtype KEY_TYPE   is integer;
+--  subtype VALUE_TYPE is std_logic_vector;
 
 
   type PT_DICT is protected
@@ -113,7 +113,7 @@ package body corelib_Dict is
       variable entry : t_entry_ptr := Find(key);
     begin
       assert entry /= null
-        report PT_DICT'instance_name & ": ERROR: key " & to_string(key) & " not found"
+        --report PT_DICT'instance_name & ": ERROR: key " & to_string(key) & " not found"
         severity failure;
       data := entry.data.all;
     end procedure Get;
@@ -122,7 +122,7 @@ package body corelib_Dict is
       variable entry : t_entry_ptr := Find(key);
     begin
       assert entry /= null
-        report PT_DICT'instance_name & ": ERROR: key " & to_string(key) & " not found"
+        --report PT_DICT'instance_name & ": ERROR: key " & to_string(key) & " not found"
         severity failure;
       return entry.data.all;
     end function Get;
