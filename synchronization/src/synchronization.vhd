@@ -10,7 +10,7 @@ package synchronization_pkg is
 
   procedure trigger (
     signal event : out event_t;
-    constant delay : in delay_length := 0 fs);
+    constant delay : in delay_length := delay_length'left);
 
   procedure wait_on (
     signal event : event_t);
@@ -43,9 +43,9 @@ package body synchronization_pkg is
 
   procedure trigger (
     signal event : out event_t;
-    constant delay : in delay_length := 0 fs) is
+    constant delay : in delay_length := delay_length'left) is
   begin
-    event <= now + delay after delay;
+    event <= transport now + delay after delay;
   end;
 
   procedure wait_on (
@@ -62,9 +62,9 @@ package body synchronization_pkg is
     variable timed_out : out boolean) is
   begin
     if event /= now then
-      assert timeout > 0 ns
-        report "Setting negative timeout to 0 ns" severity warning;
-      wait on event for maximum(0 ns, timeout);
+      assert timeout > delay_length'left
+        report "Setting negative timeout to " & to_string(delay_length'left) severity warning;
+      wait on event for maximum(delay_length'left, timeout);
     end if;
     timed_out := event /= now;
   end;

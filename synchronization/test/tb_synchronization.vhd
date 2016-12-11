@@ -100,6 +100,20 @@ begin
         wait for resolution_limit;
         wait_on(concurently_triggered_event);
         check_equal(now - start, concurently_triggered_event_delay_c);
+      elsif run("Test that no events in a sequence with decreasing spacing are deleted") then
+        wait for 0 fs;
+        check_equal(number_of_times_triggered, 1, "Expected an initial run of the process at this point");
+        trigger(event, 3 ns);
+        trigger(event, 5 ns);
+        wait for 6 ns;
+        check_equal(number_of_times_triggered, 3, "Expected two new events at this point");
+      elsif run("To be supported: Test that events can be sceduled out of order") then
+        wait for 0 fs;
+        check_equal(number_of_times_triggered, 1, "Expected an initial run of the process at this point");
+        trigger(event, 5 ns);
+        trigger(event, 3 ns);
+        wait for 6 ns;
+        check_equal(number_of_times_triggered, 3, "Expected two new events at this point");
       end if;
     end loop;
 
