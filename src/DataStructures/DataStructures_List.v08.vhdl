@@ -30,6 +30,11 @@
 package DataStructures_List is
 	generic (
 		type ELEMENT_TYPE;
+		constant ELEMENT_MINIMUM : ELEMENT_TYPE;
+		constant ELEMENT_MAXIMUM : ELEMENT_TYPE;
+		function "<"(L : ELEMENT_TYPE; R : ELEMENT_TYPE) return boolean;
+		function "<="(L : ELEMENT_TYPE; R : ELEMENT_TYPE) return boolean;
+		function ">="(L : ELEMENT_TYPE; R : ELEMENT_TYPE) return boolean;
 		InitialMasterListSize	: POSITIVE	:= 4;
 		InitialChunkListSize	: POSITIVE	:= 8;
 		MasterListResize			: POSITIVE	:= 8;
@@ -50,8 +55,8 @@ package DataStructures_List is
 		-- impure function	Prepend(Value : ELEMENT_TYPE) return NATURAL;
 		-- procedure				Prepend(Values : ELEMENT_ARRAY);
 		-- impure function	Prepend(Values : ELEMENT_ARRAY) return NATURAL;
-		-- procedure				Insert(Index : NATURAL; Value : ELEMENT_TYPE);
-		-- procedure				Insert(Index : NATURAL; Values : ELEMENT_ARRAY);
+		procedure				Insert(Index : NATURAL; Value : ELEMENT_TYPE);
+		procedure				Insert(Index : NATURAL; Values : ELEMENT_ARRAY);
 		impure function	IndexOf(Value : ELEMENT_TYPE) return INTEGER;
 		procedure				Set(Index : NATURAL; Value : ELEMENT_TYPE);
 		impure function	Set(Index : NATURAL; Value : ELEMENT_TYPE) return ELEMENT_TYPE;
@@ -62,6 +67,7 @@ package DataStructures_List is
 		impure function	Remove(Value : ELEMENT_TYPE) return NATURAL;
 		-- procedure				Remove(Values : ELEMENT_ARRAY);
 		impure function	ToArray(Start : INTEGER := 0; Stop : INTEGER := -1; COUNT : NATURAL := 0) return ELEMENT_ARRAY;
+		procedure				Sort;
 		impure function	Count return natural;
 		impure function	Size return positive;
 		-- procedure				Resize(Size : positive);
@@ -72,15 +78,17 @@ end package;
 package body DataStructures_List is
 	-- protected list implementation
 	type PT_LIST is protected body
-		subtype T_Chunk is ELEMENT_ARRAY;
-		type P_Chunk is access T_Chunk;
+		subtype	T_CHUNK is ELEMENT_ARRAY;
+		type		P_CHUNK is access T_CHUNK;
 		
-		type T_MasterListItem is record
+		type T_MASTERLIST_ITEM is record
 			Count			: NATURAL;
-			Pointer		: P_Chunk;
+			Minimum		: ELEMENT_TYPE;
+			Maximum		: ELEMENT_TYPE;
+			Pointer		: P_CHUNK;
 		end record;
-		type T_MasterList is array(NATURAL range <>) of T_MasterListItem;
-		type P_MasterList is access T_MasterList;
+		type T_MASTERLIST is array(NATURAL range <>) of T_MASTERLIST_ITEM;
+		type P_MASTERLIST is access T_MASTERLIST;
 		
 		type T_AddressTuple is record
 			MasterIndex	: INTEGER;
@@ -89,14 +97,16 @@ package body DataStructures_List is
 		end record;
 		
 		variable I_Count						: NATURAL				:= 0;
+		variable I_IsSorted					: BOLLEAN				:= TRUE;
 		variable I_MasterList_Size	: POSITIVE			:= InitialMasterListSize;
 		variable I_MasterList_Count	: NATURAL				:= 0;
 		variable I_MasterList_Last	: NATURAL				:= 0;
-		variable I_MasterList				: P_MasterList	:= null;
+		variable I_MasterList				: P_MASTERLIST	:= null;
 		
 		procedure Init is
 		begin
 			I_Count									:= 0;
+			I_IsSorted							:= TRUE;
 			I_MasterList_Size				:= InitialMasterListSize;
 			I_MasterList_Count			:= 1;
 			I_MasterList_Last				:= 0;
@@ -145,6 +155,13 @@ package body DataStructures_List is
 			variable i : NATURAL;
 			variable j : NATURAL;
 		begin
+			-- does appending a new value destroy the sorted property?
+			if (I_IsSorted = TRUE) then
+				if (value < I_MasterList(I_MasterList_Last).Maximum) then
+					I_IsSorted := FALSE;
+				end if;
+			end if;
+			
 			CheckResize(1);
 			
 			i := I_MasterList_Last;
@@ -167,7 +184,10 @@ package body DataStructures_List is
 		
 		procedure Append(Values : ELEMENT_ARRAY) is
 		begin
-		
+			-- TODO: Can be improved to reduced CheckResize calls
+			for i in Values'range loop
+				Append(Values(i));
+			end loop;
 		end procedure;
 		
 		impure function	Append(Values : ELEMENT_ARRAY) return NATURAL is
@@ -210,7 +230,7 @@ package body DataStructures_List is
 			variable k	: NATURAL;
 		begin
 			k := 0;
-			for i in 0 to I_MasterList_Count - 1 loop
+			for i in 0 to I_MasterList_Last loop
 				for j in 0 to I_MasterList(i).Count - 1 loop
 					if (I_MasterList(i).Pointer(j) = Value) then
 						return (i, j, k);
@@ -230,7 +250,7 @@ package body DataStructures_List is
 				return (-1, -1, -1);
 			end if;
 			k := Index;
-			for i in 0 to I_MasterList_Count - 1 loop
+			for i in 0 to I_MasterList_Last loop
 				j := I_MasterList(i).Count;
 				if (k < j) then
 					return (i, k, Index);
@@ -337,7 +357,7 @@ package body DataStructures_List is
 			variable k			: NATURAL;
 		begin
 			k := 0;
-			for i in 0 to I_MasterList_Count - 1 loop
+			for i in 0 to I_MasterList_Last loop
 				for j in 0 to I_MasterList(i).Count - 1 loop
 					Result(k)	:= I_MasterList(i).Pointer(j);
 					k					:= k + 1;
@@ -360,5 +380,33 @@ package body DataStructures_List is
 		-- begin
 		
 		-- end procedure;
+		
+		procedure Sort is
+		begin
+			if (I_IsSorted = TRUE) then
+				return;
+			end if;
+			
+			-- create a temporary list
+			SlaveList_Size				:= I_MasterList_Size;
+			SlaveList_Count				:= 1;
+			SlaveList_Last				:= 0;
+			SlaveList							:= new T_MasterList(0 to I_MasterList_Size - 1);
+			SlaveList(0).Count		:= 0;
+			SlaveList(0).Minimum	:= ELEMENT_MINIMUM;
+			SlaveList(0).maximum	:= ELEMENT_MAXIMUM;
+			SlaveList(0).Pointer	:= new T_Chunk(0 to InitialChunkListSize - 1);
+			
+			for ML_i in 0 to I_MasterList_Last loop
+				for ML_j in 0 to I_MasterList(ML_i).Count - 1 loop
+					value := I_MasterList(ML_i).Pointer(ML_j);
+					for SL_i in 0 to SlaveList_Last loop
+						if ((value >= SlaveList(SL_i).Minimum) and (value < SlaveList(SL_i).Maximum)) then
+							
+							
+					-- is space left?
+					if (SlaveList(SlaveList_Last).Count = InitialChunkListSize) then
+			
+		end procedure;
 	end protected body;
 end package body;
