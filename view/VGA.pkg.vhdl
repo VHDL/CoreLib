@@ -6,6 +6,10 @@
 -- Further links:     https://en.wikipedia.org/wiki/VGA_connector
 -- =============================================================================
 -- 
+
+library ieee;
+use ieee.std_logic_1164.all;
+
 use work.I2C.all;
 
 package VGA_BUS is
@@ -36,6 +40,7 @@ package VGA_BUS is
   
   view V_VGA of R_VGA_with_DCC is
     VGA : out;         -- no need for a view here, because all are outputs
-    view DDC : view V_I2C;
+    DDC : view V_I2C;
   end view;
+
 end package;

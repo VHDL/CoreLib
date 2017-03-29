@@ -5,6 +5,9 @@
 -- Standard/Manual:   http://pdf1.alldatasheet.com/datasheet-pdf/view/37318/SAMSUNG/KS0066.html
 -- =============================================================================
 -- 
+
+library ieee;
+use ieee.std_logic_1164.all;
 use work.TriState.all;
 
 package LCDBus is

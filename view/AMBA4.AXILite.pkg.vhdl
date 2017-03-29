@@ -12,6 +12,10 @@
 --  * Read Addresses  M -> S
 --  * Read Data       M <- S
 
+library ieee;
+use ieee.std_logic_1164.all;
+use ieee.numeric_std.all;
+
 package AXI4Lite is
   generic (
     DATA_WIDTH : positive := 32
@@ -38,9 +42,9 @@ package AXI4Lite is
   end record;
 
   type T_AXILite_Address is record
-    Handshake : T_AXI_Handshake;
-    Address   : unsigned;
-    prot      : T_AXI_prot;
+    Handshake  : T_AXI_Handshake;
+    Address    : unsigned;
+    protection : T_AXI_prot;
   end record;
 
   type T_AXILite_WriteData is record
@@ -75,25 +79,25 @@ package AXI4Lite is
     Ready     : in;
   end view;
 
-  view V_AXILite_Address of T_AXI_Address is
-    Handshake : V_AXI_Handshake;
-    Address   : out;
-    prot      : out;
+  view V_AXILite_Address of T_AXILite_Address is
+    Handshake  : view V_AXI_Handshake;
+    Address    : out;
+    protection : out;
   end view;
 
   view V_AXILite_WriteData of T_AXILite_WriteData is
-    Handshake : V_AXI_Handshake;
+    Handshake : view V_AXI_Handshake;
     Data      : out;
     Strobe    : out;
   end view;
 
   view V_AXILite_WriteResponse of T_AXILite_WriteResponse is
-    Handshake : V_AXI_Handshake;
+    Handshake : view V_AXI_Handshake;
     Response  : out;
   end view;
 
   view V_AXILite_ReadData of T_AXILite_ReadData is
-    Handshake : V_AXI_Handshake;
+    Handshake : view V_AXI_Handshake;
     Data      : out;
     Response  : out;
   end view;
@@ -101,19 +105,19 @@ package AXI4Lite is
   -- Top level views for master and slave.
   view V_AXILite_Master of T_AXILite is
     System        : in;
-    WriteAddress  : V_AXILite_Address;
-    WriteData     : V_AXILite_WriteData;
-    WriteResponse : V_AXILite_WriteResponse'converse;
-    ReadAddress   : V_AXILite_Address;
-    ReadData      : V_AXILite_ReadData'converse;
+    WriteAddress  : view V_AXILite_Address;
+    WriteData     : view V_AXILite_WriteData;
+    WriteResponse : view V_AXILite_WriteResponse'converse;
+    ReadAddress   : view V_AXILite_Address;
+    ReadData      : view V_AXILite_ReadData'converse;
   end view;
 
   view V_AXILite_Slave of T_AXILite is
-    Clock         : in;
-    WriteAddress  : V_AXILite_Address'converse;
-    WriteData     : V_AXILite_WriteData'converse;
-    WriteResponse : V_AXILite_WriteResponse;
-    ReadAddress   : V_AXILite_Address'converse;
-    ReadData      : V_AXILite_ReadData;
+    System        : in;
+    WriteAddress  : view V_AXILite_Address'converse;
+    WriteData     : view V_AXILite_WriteData'converse;
+    WriteResponse : view V_AXILite_WriteResponse;
+    ReadAddress   : view V_AXILite_Address'converse;
+    ReadData      : view V_AXILite_ReadData;
   end view;
 end package;

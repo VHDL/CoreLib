@@ -5,6 +5,9 @@
 -- Further links:     https://en.wikipedia.org/wiki/Three-state_logic
 -- =============================================================================
 -- 
+library ieee;
+use ieee.std_logic_1164.all;
+
 package TriState is
 	type R_TriState is record
 		Input        : std_logic;  -- alternative names: i

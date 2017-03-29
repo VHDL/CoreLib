@@ -6,6 +6,9 @@
 -- Further links:     https://en.wikipedia.org/wiki/JTAG
 -- =============================================================================
 -- 
+library ieee;
+use ieee.std_logic_1164.all;
+
 package JTAG is
 	type R_JTAG is record
 		TestClock      : std_logic;  -- alternative names: TCK 

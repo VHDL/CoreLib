@@ -5,6 +5,9 @@
 -- Standard/Manual:   https://www.xilinx.com/aurora/aurora_member/sp006.pdf
 -- =============================================================================
 -- 
+library ieee;
+use ieee.std_logic_1164.all;
+
 package Xilinx_LocalLink is
 	type R_Xilinx_LocalLink_Simple is record
 		SourceReady_n      : std_logic;

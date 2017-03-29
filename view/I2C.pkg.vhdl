@@ -8,6 +8,9 @@
 -- Further links:     https://en.wikipedia.org/wiki/I%C2%B2C
 -- =============================================================================
 -- 
+
+library ieee;
+use ieee.std_logic_1164.all;
 use work.TriState.all;
 
 package I2C is

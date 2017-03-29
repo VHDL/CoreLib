@@ -5,6 +5,9 @@
 -- Standard/Manual:   http://poc-library.readthedocs.io/en/release/Interfaces/FIFO.html
 -- =============================================================================
 -- 
+library ieee;
+use ieee.std_logic_1164.all;
+
 package PoC_FIFO is
 	type R_FIFO_WritePort_Simple is record
 		Put  : std_logic;

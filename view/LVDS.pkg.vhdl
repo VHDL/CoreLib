@@ -6,6 +6,9 @@
 -- Further links:     https://en.wikipedia.org/wiki/Low-voltage_differential_signaling
 -- =============================================================================
 -- 
+library ieee;
+use ieee.std_logic_1164.all;
+
 package LVDS is
 	type R_LVDS is record
 		P : std_logic;  -- alternative names: I,  O

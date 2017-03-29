@@ -5,6 +5,9 @@
 -- Standard/Manual:   http://www.arm.com
 -- =============================================================================
 -- 
+library ieee;
+use ieee.std_logic_1164.all;
+
 package ARM_AMBA4_AXIStream is
 	type R_ARM_AMBA4_AXIStream_Simple is record
 		TValid  : std_logic;

@@ -14,6 +14,9 @@
 -- I extended this by an interrupt message byte. All interrupt wires are latched
 -- in an interrupt controller and stored with the corresponding error message.
 -- 
+library ieee;
+use ieee.std_logic_1164.all;
+
 package PicoBlaze is
   type R_DataBus is record
     ReadStrobe    : std_logic;
@@ -25,10 +28,10 @@ package PicoBlaze is
 		
     Interrupt     : std_logic;
     Message       : std_logic_vector(7 downto 0);
-    Interrupt_Ack : std_logic
+    Interrupt_Ack : std_logic;
   end record;
 
-	type T_DataBus_Vector is array(natural range <>) of R_DataBus;
+  type T_DataBus_Vector is array(natural range <>) of R_DataBus;
 	
   view V_DataBus of R_DataBus is
     ReadStrobe    : out;
@@ -40,7 +43,7 @@ package PicoBlaze is
 
     Interrupt     : in;
     Message       : in;
-    Interrupt_Ack : out
+    Interrupt_Ack : out;
   end view;
 end package;
 
